@@ -95,7 +95,11 @@ class tsUpload {
          else $this->found = $this->found + 1;
          //
          $type = explode('/',$file['type']);
-         if($file['size'] > $this->max_size) return '#'.$this->found.' pesa mas de 1 MB.';
+         if($file['size'] > $this->max_size) {
+            $max_mb = $this->max_size / 1048576;
+            $max_mb = rtrim(rtrim(number_format($max_mb, 2, '.', ''), '0'), '.');
+            return '#'.$this->found.' pesa mas de '.$max_mb.' MB.';
+         }
          elseif(!in_array($type[1], $this->allow_types)) return '#'.$this->found.' no es una imagen.';
       } elseif($type == 'url'){
          $this->file_size = getimagesize($this->file_url);
