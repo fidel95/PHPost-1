@@ -74,19 +74,37 @@ class tsAdmin {
     * Agregamos esta función ya que se repite 2 veces,
     * extraemos las imagenes
    */
-   public function getExtraIcons(string $folder = 'cat', int $size = 16) {
+   public function getExtraIcons(string $folder = 'cat', int $size = 16): array {
+      $icons = [];
       # Accedemos a la carpeta de icons
-      $carpeta = opendir( TS_FILES . "images/{$folder}" );
+      $path = TS_FILES . "images/{$folder}";
+      if (!is_dir($path)) {
+         return $icons;
+      }
+      $files = scandir($path);
+      if ($files === false) {
+         return $icons;
+      }
+      $extensions = array_map('strtolower', $this->extension);
       # Recorremos la carpeta
-      while ($archivo = readdir($carpeta)) {
-         # Obtenemos la extension
-         $ext = substr($archivo, -3);
+      foreach ($files as $archivo) {
+         if ($archivo === '.' || $archivo === '..') {
+            continue;
+         }
+         $ext = strtolower(pathinfo($archivo, PATHINFO_EXTENSION));
          # Es una imagen?
-         if (in_array($ext, $this->extension)) {
+         if (in_array($ext, $extensions, true)) {
             if ($size != 16) {
-               $im_size = substr($archivo, -6, 2);
-               if ($size == $im_size) $icons[] = substr($archivo, 0, -7);
-            } else $icons[] = $archivo;
+               $basename = pathinfo($archivo, PATHINFO_FILENAME);
+               if (preg_match('/^(.*)_(\d+)$/', $basename, $matches)) {
+                  $im_size = (int) $matches[2];
+                  if ($size === $im_size) {
+                     $icons[] = $matches[1];
+                  }
+               }
+            } else {
+               $icons[] = $archivo;
+            }
          }
       }
       # Retornamos las imagenes
