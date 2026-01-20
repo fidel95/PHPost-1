@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `p_categorias` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;";
 
 $phpos_sql['pv_categorias'] = "
-INSERT INTO `p_categorias` (`cid`, `c_orden`, `c_nombre`, `c_seo`, `c_img`) VALUES
+INSERT IGNORE INTO `p_categorias` (`cid`, `c_orden`, `c_nombre`, `c_seo`, `c_img`) VALUES
 (1, 1, 'Animaciones', 'animaciones', 'flash.png'),
 (2, 2, 'Apuntes y Monografías', 'apuntesymonografias', 'report.png'),
 (3, 3, 'Arte', 'arte', 'palette.png'),
@@ -154,18 +154,18 @@ CREATE TABLE IF NOT EXISTS `p_posts` (
   `post_date` int(10) NOT NULL,
   `post_tags` varchar(128) NOT NULL,
   `post_puntos` int(11) unsigned NOT NULL DEFAULT '0',
-  `post_comments` int(11) NOT NULL,
-  `post_seguidores` int(11) NOT NULL,
-  `post_shared` int(11) NOT NULL,
-  `post_favoritos` int(11) NOT NULL,
-  `post_cache` int(10) NOT NULL,
+  `post_comments` int(11) NOT NULL DEFAULT '0',
+  `post_seguidores` int(11) NOT NULL DEFAULT '0',
+  `post_shared` int(11) NOT NULL DEFAULT '0',
+  `post_favoritos` int(11) NOT NULL DEFAULT '0',
+  `post_cache` int(10) NOT NULL DEFAULT '0',
   `post_hits` int(11) NOT NULL DEFAULT '0',
-  `post_ip` varchar(15) NOT NULL,
+  `post_ip` varchar(15) NOT NULL DEFAULT '',
   `post_private` int(1) NOT NULL DEFAULT '0',
   `post_block_comments` int(1) NOT NULL DEFAULT '0',
   `post_sponsored` int(1) NOT NULL DEFAULT '0',
   `post_sticky` int(1) NOT NULL DEFAULT '0',
-  `post_smileys` int(1) NOT NULL,
+  `post_smileys` int(1) NOT NULL DEFAULT '0',
   `post_visitantes` int(1) NOT NULL DEFAULT '0',
   `post_status` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`post_id`),
@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `p_posts` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;";
 
 $phpos_sql['pv_posts'] = "
-INSERT INTO `p_posts` (`post_id`, `post_user`, `post_category`, `post_title`, `post_body`, `post_date`, `post_tags`, `post_puntos`, `post_hits`,  `post_private`, `post_block_comments`, `post_sponsored`, `post_sticky`, `post_status`) VALUES
+INSERT IGNORE INTO `p_posts` (`post_id`, `post_user`, `post_category`, `post_title`, `post_body`, `post_date`, `post_tags`, `post_puntos`, `post_hits`,  `post_private`, `post_block_comments`, `post_sponsored`, `post_sticky`, `post_status`) VALUES
 (1, 1, 30, 'Bienvenido a PHPost Risus', '[align=center][size=18]Este es el primer post de los miles que tendrá tu web  ;)  \r\n\r\nGracias por elegir a [url=http://www.phpost.net]PHPost[/url] como tu Link Sharing System.[/size][/align]', 0, 'PHPost, Risus, 1.3.0, Taringa!', 0, 0, 0, 0, 0, 0, 0);";
 
 $phpos_sql['p_votos'] = "
@@ -254,10 +254,10 @@ CREATE TABLE IF NOT EXISTS `u_miembros` (
   `user_email` varchar(35) NOT NULL,
   `user_rango` int(3) NOT NULL DEFAULT '3',
   `user_puntos` int(6) unsigned NOT NULL DEFAULT '0',
-  `user_posts` int(11) NOT NULL,
-  `user_comentarios` int(11) NOT NULL,
-  `user_seguidores` int(11) NOT NULL,
-  `user_cache` int(10) NOT NULL,
+  `user_posts` int(11) NOT NULL DEFAULT '0',
+  `user_comentarios` int(11) NOT NULL DEFAULT '0',
+  `user_seguidores` int(11) NOT NULL DEFAULT '0',
+  `user_cache` int(10) NOT NULL DEFAULT '0',
   `user_puntosxdar` int(2) unsigned NOT NULL DEFAULT '0',
   `user_bad_hits` int(2) unsigned NOT NULL DEFAULT '0',
   `user_nextpuntos` int(10) NOT NULL DEFAULT '0',
@@ -421,7 +421,7 @@ CREATE TABLE IF NOT EXISTS `u_rangos` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;";
 
 $phpos_sql['uv_rangos'] = "
-INSERT INTO `u_rangos` (`rango_id`, `r_name`, `r_color`, `r_image`, `r_cant`, `r_allows`, `r_type`) VALUES
+INSERT IGNORE INTO `u_rangos` (`rango_id`, `r_name`, `r_color`, `r_image`, `r_cant`, `r_allows`, `r_type`) VALUES
 (1, 'Administrador', 'D6030B', 'rosette.png', 0, 'a:4:{s:4:\"suad\";s:2:\"on\";s:4:\"goaf\";s:1:\"5\";s:5:\"gopfp\";s:2:\"20\";s:5:\"gopfd\";s:2:\"50\";}', 0),
 (2, 'Moderador', 'ff9900', 'shield.png', 0, 'a:4:{s:4:\"sumo\";s:2:\"on\";s:4:\"goaf\";s:2:\"15\";s:5:\"gopfp\";s:2:\"18\";s:5:\"gopfd\";s:2:\"30\";}', 0),
 (3, 'Novato', '171717', 'new.png', 0, 'a:12:{s:4:\"godp\";s:2:\"on\";s:4:\"gopp\";s:2:\"on\";s:5:\"gopcp\";s:2:\"on\";s:5:\"govpp\";s:2:\"on\";s:5:\"govpn\";s:2:\"on\";s:5:\"goepc\";s:2:\"on\";s:5:\"godpc\";s:2:\"on\";s:4:\"gopf\";s:2:\"on\";s:5:\"gopcf\";s:2:\"on\";s:4:\"goaf\";s:2:\"20\";s:5:\"gopfp\";s:1:\"5\";s:5:\"gopfd\";s:1:\"5\";}', 0),
@@ -533,7 +533,7 @@ CREATE TABLE IF NOT EXISTS `w_configuracion` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $phpos_sql['wv_configuracion'] = "
-INSERT INTO `w_configuracion` (`tscript_id`, `titulo`, `slogan`, `url`, `providers`, `email`, `banner`, `tema_id`, `ads_300`, `ads_468`, `ads_160`, `ads_728`, `ads_search`, `chat_id`, `xat_id`, `c_last_active`, `c_allow_sess_ip`, `c_count_guests`, `c_reg_active`, `c_reg_activate`, `c_reg_rango`, `c_met_welcome`, `c_message_welcome`, `c_fotos_private`, `c_hits_guest`, `c_keep_points`, `c_allow_points`, `c_allow_edad`, `c_max_posts`, `c_max_com`, `c_max_nots`, `c_max_acts`, `c_newr_type`, `c_allow_sump`, `c_allow_firma`, `c_allow_upload`, `c_allow_portal`, `c_allow_live`, `c_see_mod`, `c_stats_cache`, `c_desapprove_post`, `offline`, `offline_message`, `pkey`, `skey`, `version`, `version_code`) VALUES
+INSERT IGNORE INTO `w_configuracion` (`tscript_id`, `titulo`, `slogan`, `url`, `providers`, `email`, `banner`, `tema_id`, `ads_300`, `ads_468`, `ads_160`, `ads_728`, `ads_search`, `chat_id`, `xat_id`, `c_last_active`, `c_allow_sess_ip`, `c_count_guests`, `c_reg_active`, `c_reg_activate`, `c_reg_rango`, `c_met_welcome`, `c_message_welcome`, `c_fotos_private`, `c_hits_guest`, `c_keep_points`, `c_allow_points`, `c_allow_edad`, `c_max_posts`, `c_max_com`, `c_max_nots`, `c_max_acts`, `c_newr_type`, `c_allow_sump`, `c_allow_firma`, `c_allow_upload`, `c_allow_portal`, `c_allow_live`, `c_see_mod`, `c_stats_cache`, `c_desapprove_post`, `offline`, `offline_message`, `pkey`, `skey`, `version`, `version_code`) VALUES
 (1, 'Taringa!', 'Inteligencia Recargada', '', '', '', 'http://i.imgur.com/2nEr3s.png?1', 1, '<a href=\"http://www.phpost.net/\" target=\"_blank\"><img src=\"/themes/default/images/ad300.gif\"/></a>', '<a href=\"http://www.phpost.net/\" target=\"_blank\"><img src=\"/themes/default/images/ad468.png\"/></a>', '<a href=\"http://www.phpost.net/\" target=\"_blank\"><img src=\"/themes/default/images/ad160.gif\"/></a>', '<a href=\"http://www.phpost.net/\" target=\"_blank\"><img src=\"/themes/default/images/ad728.gif\"/></a>', 'partner-pub-5535725517227860:7900040286', '', 0, 15, 1, 0, 1, 1, 3, 0, 'Hola [usuario], [welcome] a [b][web][/b].', 0, 0, 0, 0, 18, 50, 50, 99, 99, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 'Estamos en mantenimiento', '', '', 'Risus 1.3.0', 'risus_1_3_0');";
 
 $phpos_sql['w_denuncias'] = "
@@ -653,7 +653,7 @@ CREATE TABLE IF NOT EXISTS `w_stats` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
 $phpos_sql['wv_stats'] = "
-INSERT INTO `w_stats` (`stats_no`, `stats_max_online`) VALUES (1, 0);";
+INSERT IGNORE INTO `w_stats` (`stats_no`, `stats_max_online`) VALUES (1, 0);";
 
 $phpos_sql['w_temas'] = "
 CREATE TABLE IF NOT EXISTS `w_temas` (
@@ -666,5 +666,5 @@ CREATE TABLE IF NOT EXISTS `w_temas` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2;";
 
 $phpos_sql['wv_temas'] = "
-INSERT INTO `w_temas` (`tid`, `t_name`, `t_url`, `t_path`, `t_copy`) VALUES
+INSERT IGNORE INTO `w_temas` (`tid`, `t_name`, `t_url`, `t_path`, `t_copy`) VALUES
 (1, 'PHPost Default', '/themes/default', 'default', 'Taringa!');";
